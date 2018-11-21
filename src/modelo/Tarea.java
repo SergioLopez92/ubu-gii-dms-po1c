@@ -3,6 +3,8 @@
  */
 package modelo;
 
+import com.sun.org.apache.xpath.internal.axes.RTFIterator;
+
 /**
  * @author Sergio
  *
@@ -13,8 +15,13 @@ public class Tarea {
 	private Requisito requisito;
 	private MiembroDeEquipo asignadoA;
 	
-	public Tarea(Requisito requisito) {
+	public Tarea(Requisito requisito, MiembroDeEquipo asignadoA, String titulo, String descripcion, float coste, float beneficio) {
 		this.requisito = requisito;
+		this.asignadoA = asignadoA;
+		this.descripcion = descripcion;
+		this.titulo = titulo;
+		this.coste = coste;
+		this.beneficio = beneficio;
 	}
 	
 	public void asignarMiembro (MiembroDeEquipo miem){
