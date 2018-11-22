@@ -75,5 +75,10 @@ public class Tarea {
 	public void setAsignadoA(MiembroDeEquipo asignadoA) {
 		this.asignadoA = asignadoA;
 	}
-	
+	@Override
+	public String toString(){
+		
+		return titulo;
+		
+	}
 }

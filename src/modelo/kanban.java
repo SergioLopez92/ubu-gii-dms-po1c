@@ -107,12 +107,101 @@ public class kanban {
 				sprints.get(choice - 1).addTareaToDo(tareaElegida);
 				break;
 
-			
+			case 5:
+				System.out.print("Elige el srpint en el que está la tarea que quieres mover: ");
+				System.out.println("[1" + "-" + sprints.size() + "]");
+				int numSprint;
+				numSprint = reader.nextInt();
+				sprints.get(numSprint - 1).printear();
 
-				
+				System.out.println(
+						"Elige en numero de la lista donde se encuentra la tarea (1-Todo, 2-Doing, 3-Test, 4-Finished)");
+				int numList;
+				numList = reader.nextInt();
+
+				System.out.println("Escribe el numero de la posición dentro de la lista de la tarea a mover");
+				int numTarea;
+				numTarea = reader.nextInt();
+
+				System.out.println(
+						"Escribe el numero de la lista donde quieras mover la tarea(1-Todo, 2-Doing, 3-Test, 4-Finished)");
+				int numList2;
+				numList2 = reader.nextInt();
+
+				Tarea t = sprints.get(numSprint - 1).getListas().get(numList - 1).remove(numTarea - 1);
+
+				sprints.get(numSprint - 1).getListas().get(numList2 - 1).add(t);
+				break;
+
+			case 6:
+				System.out.println("Escribe el titulo de la tarea a editar");
+				for (SprintBacklog spr : sprints) {
+					spr.printear();
+				}
+				String tar;
+				tar = reader.next();
+				Tarea tareaEditar = null;
+
+				for (Tarea e : prBacklog.getToDo()) {
+					if (e.getTitulo().equals(tar)) {
+						tareaEditar = e;
+					}
+				}
+				if (tareaEditar == null) {
+					for (SprintBacklog spr : sprints) {
+						for (int i = 0; i < spr.getListas().size(); i++) {
+							for (Tarea tare : spr.getListas().get(i)) {
+								if (tare.getTitulo().equals(tar)) {
+									tareaEditar = tare;
+								}
+							}
+						}
+					}
+				}
+
+				System.out.println("Introduce el nuevo titulo de la tarea");
+				String titulo2 = reader.next();
+				System.out.println("Introduce la descripcion de la tarea");
+				String descripcion2 = reader.next();
+				System.out.println("Introduce el coste de la tarea");
+				float coste2 = reader.nextFloat();
+				System.out.println("Introduce el beneficio de la tarea");
+				float beneficio2 = reader.nextFloat();
+				System.out.println("Elige el miembro al que se va a asignar la tarea");
+				int count2 = 0;
+				for (MiembroDeEquipo miembro : miembros) {
+					count2++;
+					System.out.println(count2 + ":" + miembro.getNombre());
+
+				}
+				int choice2 = reader.nextInt();
+				MiembroDeEquipo miembroElegido2 = miembros.get(choice2 - 1);
+
+				System.out.println("Se va a añadir la tarea con los siguientes datos:" + "Titulo: " + titulo2
+						+ "Asignada a: " + miembroElegido2.getNombre());
+				System.out.println("¿Es correcto? s/n");
+				String valid3 = reader.next();
+				if (valid3.equals("s")) {
+
+					if (tareaEditar != null) {
+
+						tareaEditar.setTitulo(titulo2);
+						tareaEditar.setDescripcion(descripcion2);
+						tareaEditar.setCoste(coste2);
+						tareaEditar.setBeneficio(beneficio2);
+						tareaEditar.asignarMiembro(miembroElegido2);
+
+					} else {
+						System.out.println("Error no se encuentra una tarea con ese titulo");
+					}
+					break;
+
+				}
+			case 7:
+				flag=false;
+				break;
 			}
 
 		}
-
 	}
 }
