@@ -1,5 +1,11 @@
 package modelo;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,7 +33,9 @@ public class kanban {
 			System.out.println("Opcion 4: Mover tarea del Product Backlog al Spring Backlog");
 			System.out.println("Opcion 5: Mover tarea entre las fases del ciclo de vida");
 			System.out.println("Opcion 6: Editar tarea");
-			System.out.println("Opcion 7: Salir de la aplicacion");
+			System.out.println("Opcion 7: Salir de la aplicacion guardando los cambios");
+			System.out.println("Opcion 8: Salir de la aplicacion sin guardar");
+
 
 			Scanner reader = new Scanner(System.in);
 			option = reader.nextInt();
@@ -61,6 +69,7 @@ public class kanban {
 				System.out.println("Introduce el titulo de la tarea a añadir");
 				String titulo = reader.next();
 				System.out.println("Introduce la descripcion de la tarea");
+				//PROBLEMA! Espacio en blanco lo casca, con nextLine saca lo siguiente sin esperar a recibir entrada
 				String descripcion = reader.next();
 				System.out.println("Introduce el coste de la tarea");
 				float coste = reader.nextFloat();
@@ -198,10 +207,75 @@ public class kanban {
 
 				}
 			case 7:
+				saveMiembroToCSV(miembros);
+				//tiene que guardar tareas desde el SprintBacklog tambien!!
+				saveTareaToCSV(prBacklog.getToDo());
 				flag=false;
 				break;
-			}
+			
+		case 8:
+			flag=false;
+			break;
+		}
 
 		}
+	}
+	
+	
+	//Metodos para guardar las entidades en un archivo csv, cada metodo se encarga de guardar una entidad
+	private static final String separator = ";";
+	
+	private static void saveMiembroToCSV(ArrayList<MiembroDeEquipo> miembros){
+		try{
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("miembros.csv"),"UTF-8"));
+			
+			for(MiembroDeEquipo miembro: miembros){
+				StringBuffer line = new StringBuffer();
+				line.append(miembro.getDni());
+				line.append(separator);
+				line.append(miembro.getEdad());
+				line.append(separator);
+				line.append(miembro.getNombre());
+				line.append(separator);
+				bw.write(line.toString());
+				bw.newLine();
+			}
+			bw.flush();
+			bw.close();
+		}catch (UnsupportedEncodingException e){
+		}catch (FileNotFoundException e){
+		}catch (IOException e){
+		}
+		
+	}
+	
+	private static void saveTareaToCSV(ArrayList<Tarea> tareas){
+		try{
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("tareas.csv"),"UTF-8"));
+			
+			for(Tarea tarea: tareas){
+				StringBuffer line = new StringBuffer();
+				line.append(tarea.getTitulo());
+				line.append(separator);
+				line.append(tarea.getDescripcion());
+				line.append(separator);
+				line.append(tarea.getCoste());
+				line.append(separator);
+				line.append(tarea.getBeneficio());
+				line.append(separator);
+				line.append(tarea.getAsignadoA().getDni());
+				line.append(separator);
+				line.append(tarea.getRequisito().toString());
+				
+				bw.write(line.toString());
+				bw.newLine();
+			}
+			bw.flush();
+			bw.close();
+		}catch (UnsupportedEncodingException e){
+		}catch (FileNotFoundException e){
+		}catch (IOException e){
+		}
+		
 	}
 }
