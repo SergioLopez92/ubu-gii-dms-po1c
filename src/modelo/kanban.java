@@ -333,7 +333,7 @@ public class kanban {
 				line2.append(tarea.getRequisito().getID());
 				line2.append(separator);
 				line2.append(tarea.getRequisito().getTexto());
-				bw2.write(line.toString());
+				bw2.write(line2.toString());
 				bw2.newLine();
 
 			}
@@ -474,7 +474,7 @@ public class kanban {
 				// TODO: handle exception
 				System.err.println(e.getMessage());
 				
-				System.err.println("Error en la carga de los datos");
+				System.err.println("Error en la carga de los datos[Requisitos]");
 				
 			}
 			
