@@ -14,7 +14,20 @@ public class Tarea {
 	private float coste, beneficio;
 	private Requisito requisito;
 	private MiembroDeEquipo asignadoA;
+	enum Estado{
+		TODO, DOING, FINISHED, TESTING;
+	}
 	
+	Estado estado;
+	
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
 	public Tarea(Requisito requisito, MiembroDeEquipo asignadoA, String titulo, String descripcion, float coste, float beneficio) {
 		this.requisito = requisito;
 		this.asignadoA = asignadoA;

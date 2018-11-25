@@ -2,6 +2,8 @@ package modelo;
 
 import java.util.ArrayList;
 
+import modelo.Tarea.Estado;
+
 public class ProductBacklog extends Backlog {
 
 	private ArrayList<Tarea> toDo;
@@ -21,6 +23,7 @@ public class ProductBacklog extends Backlog {
 	}
 
 	public void setTareaToDo(Tarea tarea) {
+		tarea.setEstado(Estado.TODO);
 		toDo.add(tarea);
 	}
 

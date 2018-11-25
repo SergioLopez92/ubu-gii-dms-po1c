@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import modelo.Tarea.Estado;
+
 public class kanban {
 
 	public static void main(String[] args) {
@@ -35,7 +37,6 @@ public class kanban {
 			System.out.println("Opcion 6: Editar tarea");
 			System.out.println("Opcion 7: Salir de la aplicacion guardando los cambios");
 			System.out.println("Opcion 8: Salir de la aplicacion sin guardar");
-
 
 			Scanner reader = new Scanner(System.in);
 			option = reader.nextInt();
@@ -69,7 +70,8 @@ public class kanban {
 				System.out.println("Introduce el titulo de la tarea a añadir");
 				String titulo = reader.next();
 				System.out.println("Introduce la descripcion de la tarea");
-				//PROBLEMA! Espacio en blanco lo casca, con nextLine saca lo siguiente sin esperar a recibir entrada
+				// PROBLEMA! Espacio en blanco lo casca, con nextLine saca lo
+				// siguiente sin esperar a recibir entrada
 				String descripcion = reader.next();
 				System.out.println("Introduce el coste de la tarea");
 				float coste = reader.nextFloat();
@@ -113,7 +115,7 @@ public class kanban {
 				System.out.println("[1" + "-" + sprints.size() + "]");
 
 				choice = reader.nextInt();
-				sprints.get(choice - 1).addTareaToDo(tareaElegida);
+				sprints.get(choice - 1).addTarea(tareaElegida);
 				break;
 
 			case 5:
@@ -123,50 +125,79 @@ public class kanban {
 				numSprint = reader.nextInt();
 				sprints.get(numSprint - 1).printear();
 
-				System.out.println(
-						"Elige en numero de la lista donde se encuentra la tarea (1-Todo, 2-Doing, 3-Test, 4-Finished)");
-				int numList;
-				numList = reader.nextInt();
+				System.out.println("Elige el titulo de la tarea a mover");
 
-				System.out.println("Escribe el numero de la posición dentro de la lista de la tarea a mover");
-				int numTarea;
-				numTarea = reader.nextInt();
+				
+				String tituloTarea = "";
+				tituloTarea = reader.next();
 
 				System.out.println(
 						"Escribe el numero de la lista donde quieras mover la tarea(1-Todo, 2-Doing, 3-Test, 4-Finished)");
-				int numList2;
-				numList2 = reader.nextInt();
+				int numList;
+				numList = reader.nextInt();
 
-				Tarea t = sprints.get(numSprint - 1).getListas().get(numList - 1).remove(numTarea - 1);
+				Tarea t = null;
+				SprintBacklog sprChoice = sprints.get(numSprint - 1);
+				for (Tarea tarea : sprChoice.getLista()) {
+					if (tituloTarea.equals(tarea.getTitulo())) {
+						t = tarea;
+						break;
+					}
+				}
+				if (t != null) {
+					if (numList == 1) {
+						t.setEstado(Estado.TODO);
+					} else if (numList == 2) {
+						t.setEstado(Estado.DOING);
 
-				sprints.get(numSprint - 1).getListas().get(numList2 - 1).add(t);
+					} else if (numList == 3) {
+						t.setEstado(Estado.TESTING);
+					} else {
+						t.setEstado(Estado.FINISHED);
+					}
+				}
+				sprints.get(numSprint - 1).getLista().add(t);
 				break;
 
 			case 6:
+				t = null;
+				System.out.print("Elige el sprint en el que está la tarea que quieres mover: ");
+				System.out.println("[1" + "-" + sprints.size() + "]");
+				int numSprint2 = reader.nextInt() - 1;
+				
+
 				System.out.println("Escribe el titulo de la tarea a editar");
-				for (SprintBacklog spr : sprints) {
-					spr.printear();
+				for (Tarea tarea : sprints.get(numSprint2).getLista()) {
+					System.out.println(tarea.getTitulo());
 				}
+				
 				String tar;
 				tar = reader.next();
-				Tarea tareaEditar = null;
-
-				for (Tarea e : prBacklog.getToDo()) {
-					if (e.getTitulo().equals(tar)) {
-						tareaEditar = e;
-					}
-				}
-				if (tareaEditar == null) {
-					for (SprintBacklog spr : sprints) {
-						for (int i = 0; i < spr.getListas().size(); i++) {
-							for (Tarea tare : spr.getListas().get(i)) {
-								if (tare.getTitulo().equals(tar)) {
-									tareaEditar = tare;
-								}
-							}
+				 
+				 for (Tarea tarea : sprints.get(numSprint2).getLista()) {
+						if (tar.equals(tarea.getTitulo())) {
+							t = tarea;
+							break;
 						}
 					}
-				}
+				// Tarea tareaEditar = null;
+				//
+				// for (Tarea e : prBacklog.getToDo()) {
+				// if (e.getTitulo().equals(tar)) {
+				// tareaEditar = e;
+				// }
+				// }
+				// if (tareaEditar == null) {
+				// for (SprintBacklog spr : sprints) {
+				// for (int i = 0; i < spr.getListas().size(); i++) {
+				// for (Tarea tare : spr.getListas().get(i)) {
+				// if (tare.getTitulo().equals(tar)) {
+				// tareaEditar = tare;
+				// }
+				// }
+				// }
+				// }
+				// }
 
 				System.out.println("Introduce el nuevo titulo de la tarea");
 				String titulo2 = reader.next();
@@ -192,13 +223,13 @@ public class kanban {
 				String valid3 = reader.next();
 				if (valid3.equals("s")) {
 
-					if (tareaEditar != null) {
+					if (t != null) {
 
-						tareaEditar.setTitulo(titulo2);
-						tareaEditar.setDescripcion(descripcion2);
-						tareaEditar.setCoste(coste2);
-						tareaEditar.setBeneficio(beneficio2);
-						tareaEditar.asignarMiembro(miembroElegido2);
+						t.setTitulo(titulo2);
+						t.setDescripcion(descripcion2);
+						t.setCoste(coste2);
+						t.setBeneficio(beneficio2);
+						t.asignarMiembro(miembroElegido2);
 
 					} else {
 						System.out.println("Error no se encuentra una tarea con ese titulo");
@@ -208,28 +239,33 @@ public class kanban {
 				}
 			case 7:
 				saveMiembroToCSV(miembros);
-				//tiene que guardar tareas desde el SprintBacklog tambien!!
-				saveTareaToCSV(prBacklog.getToDo());
-				flag=false;
+				// NECESARIO GUARDAR DONDE ESTABA CADA TAREA (SPRINT)
+				for (SprintBacklog sp:sprints){
+					saveTareaToCSV(sp.getLista());
+				}
+
+
+				flag = false;
 				break;
-			
-		case 8:
-			flag=false;
-			break;
-		}
+
+			case 8:
+				flag = false;
+				break;
+			}
 
 		}
 	}
-	
-	
-	//Metodos para guardar las entidades en un archivo csv, cada metodo se encarga de guardar una entidad
+
+	// Metodos para guardar las entidades en un archivo csv, cada metodo se
+	// encarga de guardar una entidad
 	private static final String separator = ";";
-	
-	private static void saveMiembroToCSV(ArrayList<MiembroDeEquipo> miembros){
-		try{
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("miembros.csv"),"UTF-8"));
-			
-			for(MiembroDeEquipo miembro: miembros){
+
+	private static void saveMiembroToCSV(ArrayList<MiembroDeEquipo> miembros) {
+		try {
+			BufferedWriter bw = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream("miembros.csv"), "UTF-8"));
+
+			for (MiembroDeEquipo miembro : miembros) {
 				StringBuffer line = new StringBuffer();
 				line.append(miembro.getDni());
 				line.append(separator);
@@ -242,18 +278,18 @@ public class kanban {
 			}
 			bw.flush();
 			bw.close();
-		}catch (UnsupportedEncodingException e){
-		}catch (FileNotFoundException e){
-		}catch (IOException e){
+		} catch (UnsupportedEncodingException e) {
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 		}
-		
+
 	}
-	
-	private static void saveTareaToCSV(ArrayList<Tarea> tareas){
-		try{
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("tareas.csv"),"UTF-8"));
-			
-			for(Tarea tarea: tareas){
+
+	private static void saveTareaToCSV(ArrayList<Tarea> tareas) {
+		try {
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("tareas.csv"), "UTF-8"));
+
+			for (Tarea tarea : tareas) {
 				StringBuffer line = new StringBuffer();
 				line.append(tarea.getTitulo());
 				line.append(separator);
@@ -266,16 +302,16 @@ public class kanban {
 				line.append(tarea.getAsignadoA().getDni());
 				line.append(separator);
 				line.append(tarea.getRequisito().toString());
-				
+
 				bw.write(line.toString());
 				bw.newLine();
 			}
 			bw.flush();
 			bw.close();
-		}catch (UnsupportedEncodingException e){
-		}catch (FileNotFoundException e){
-		}catch (IOException e){
+		} catch (UnsupportedEncodingException e) {
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 		}
-		
+
 	}
 }
