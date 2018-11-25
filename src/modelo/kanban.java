@@ -22,6 +22,7 @@ public class kanban {
 		ArrayList<SprintBacklog> sprints = new ArrayList<SprintBacklog>();
 		ProductBacklog prBacklog = new ProductBacklog();
 
+
 		// bucle para ejecucion principal
 
 		boolean flag = true;
@@ -259,7 +260,7 @@ public class kanban {
 				saveMiembroToCSV(miembros);
 				// NECESARIO GUARDAR DONDE ESTABA CADA TAREA (SPRINT)
 				for (SprintBacklog sp:sprints){
-					saveTareaToCSV(sp.getLista());
+					saveTareaReqToCSV(sp.getLista());
 				}
 
 
@@ -303,9 +304,11 @@ public class kanban {
 
 	}
 
-	private static void saveTareaToCSV(ArrayList<Tarea> tareas) {
+	
+	private static void saveTareaReqToCSV(ArrayList<Tarea> tareas) {
 		try {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("tareas.csv"), "UTF-8"));
+			BufferedWriter bw2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("requisitos.csv"), "UTF-8"));
 
 			for (Tarea tarea : tareas) {
 				StringBuffer line = new StringBuffer();
@@ -320,14 +323,24 @@ public class kanban {
 				line.append(tarea.getAsignadoA().getDni());
 				line.append(separator);
 				line.append(tarea.getEstado());
-				//line.append(separator);
-				//line.append(tarea.getRequisito().toString());
+				line.append(separator);
+				line.append(tarea.getRequisito().getID());
 
 				bw.write(line.toString());
 				bw.newLine();
+				
+				StringBuffer line2 = new StringBuffer();
+				line2.append(tarea.getRequisito().getID());
+				line2.append(separator);
+				line2.append(tarea.getRequisito().getTexto());
+				bw2.write(line.toString());
+				bw2.newLine();
+
 			}
 			bw.flush();
 			bw.close();
+			bw2.flush();
+			bw2.close();
 		} catch (UnsupportedEncodingException e) {
 		} catch (FileNotFoundException e) {
 		} catch (IOException e) {
@@ -380,7 +393,13 @@ public class kanban {
 			String filaLeida;
 
 			String[] cadenaSeparada;
-			//new Tarea(new Requisito(), miembroElegido, titulo, descripcion, coste, beneficio));
+			
+			ArrayList<Requisito> requisitos = new ArrayList<Requisito>();
+			loadRequisitos(requisitos);
+			
+			
+			
+			
 			while((filaLeida = br.readLine()) != null){
 				cadenaSeparada = filaLeida.split(separator);
 				String titulo = cadenaSeparada[0];
@@ -392,6 +411,15 @@ public class kanban {
 
 				String dniMiembro = cadenaSeparada[4];
 				String estado = cadenaSeparada[5];
+				int id = Integer.parseInt(cadenaSeparada[6]);
+				String texto = null;
+				for (Requisito requisito: requisitos){
+					if(id==requisito.getID()){
+						texto=requisito.getTexto();
+						break;
+					}
+				}
+
 
 				MiembroDeEquipo miembro = null;
 				for (MiembroDeEquipo m: miembros){
@@ -399,7 +427,7 @@ public class kanban {
 						miembro = m;
 					}
 				}
-				Tarea tarea = new Tarea(null, miembro, titulo, descripcion, coste, beneficio);
+				Tarea tarea = new Tarea(new Requisito(id, texto), miembro, titulo, descripcion, coste, beneficio);
 				tarea.setEstado(Estado.valueOf(estado));
 				sprints.get(0).addTarea(tarea);
 				
@@ -414,7 +442,42 @@ public class kanban {
 			System.err.println("Error en la carga de los datos");
 			
 		}
+	}
 		
+		private static void loadRequisitos(ArrayList<Requisito> requisitos){
+			
+			BufferedReader br = null;
+			try{
+
+				File archivo = new File("requisitos.csv");
+				FileReader fr = new FileReader(archivo);
+				br =  new BufferedReader(fr);
+				String filaLeida;
+
+				String[] cadenaSeparada;
+				while((filaLeida = br.readLine()) != null){
+					cadenaSeparada = filaLeida.split(separator);
+					int id = Integer.parseInt(cadenaSeparada[0]);
+					String texto = cadenaSeparada[1];
+					requisitos.add(new Requisito(id,texto));
+					
+
+					
+
+
+										
+				}
+				br.close();
+				fr.close();
+				System.out.println("Requisitos cargadas");
+			}catch (Exception e) {
+				// TODO: handle exception
+				System.err.println(e.getMessage());
+				
+				System.err.println("Error en la carga de los datos");
+				
+			}
+			
 		
 		
 		
