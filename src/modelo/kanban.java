@@ -1,8 +1,11 @@
 package modelo;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -25,10 +28,11 @@ public class kanban {
 		int option;
 
 		while (flag) {
-			System.out.println("Bienvenido a la aplicacion kanban");
+			System.out.println("\nBienvenido a la aplicacion kanban");
 			System.out.println(
 					"Seleccione la opción que desee realizar del siguiente menu escribiendo el numero correspondiente");
 			System.out.println("--------------------------");
+			System.out.println("Opcion 0: Cargar datos");
 			System.out.println("Opcion 1: Añadir miebros");
 			System.out.println("Opcion 2: Añadir Sprint Backlog");
 			System.out.println("Opcion 3: Añadir tarea al Product Backlog");
@@ -42,6 +46,16 @@ public class kanban {
 			option = reader.nextInt();
 
 			switch (option) {
+			case 0:
+				loadMiembros(miembros);
+				int count0 = 0;
+				for (MiembroDeEquipo miembro : miembros) {
+					count0++;
+					System.out.println(count0 + ":" + miembro.getNombre());
+
+				}
+				loadSprints(prBacklog, sprints, miembros);
+				break;
 			case 1:
 				System.out.println("Introduce el nombre del miembro a añadir");
 				String nombre = reader.next();
@@ -141,6 +155,8 @@ public class kanban {
 				for (Tarea tarea : sprChoice.getLista()) {
 					if (tituloTarea.equals(tarea.getTitulo())) {
 						t = tarea;
+						sprChoice.getLista().remove(tarea);
+
 						break;
 					}
 				}
@@ -155,8 +171,10 @@ public class kanban {
 					} else {
 						t.setEstado(Estado.FINISHED);
 					}
+
 				}
 				sprints.get(numSprint - 1).getLista().add(t);
+				System.out.print("Tarea movida ");
 				break;
 
 			case 6:
@@ -301,7 +319,9 @@ public class kanban {
 				line.append(separator);
 				line.append(tarea.getAsignadoA().getDni());
 				line.append(separator);
-				line.append(tarea.getRequisito().toString());
+				line.append(tarea.getEstado());
+				//line.append(separator);
+				//line.append(tarea.getRequisito().toString());
 
 				bw.write(line.toString());
 				bw.newLine();
@@ -314,4 +334,101 @@ public class kanban {
 		}
 
 	}
+	
+	private static void loadMiembros(ArrayList<MiembroDeEquipo> miembros){
+		
+		BufferedReader br = null;
+		
+		try{
+			File archivo = new File("miembros.csv");
+			FileReader fr = new FileReader(archivo);
+			br =  new BufferedReader(fr);
+			
+			String filaLeida;
+			
+			String[] cadenaSeparada;
+			
+			while((filaLeida = br.readLine()) != null){
+				cadenaSeparada = filaLeida.split(separator);
+				String dni = cadenaSeparada[0];
+				int edad = Integer.parseInt(cadenaSeparada[1]);
+				String nombre = cadenaSeparada[2];
+				
+				miembros.add(new MiembroDeEquipo(nombre, edad, dni));
+				
+			}
+			br.close();
+			fr.close();
+			System.out.println("Miembros cargados");
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.err.println(e.getMessage());
+
+			System.err.println("Error en la carga de los datos");
+		}
+		}
+	
+	private static void loadSprints(ProductBacklog prBacklog, ArrayList<SprintBacklog> sprints, ArrayList<MiembroDeEquipo> miembros ){
+		
+		BufferedReader br = null;
+		try{
+
+			File archivo = new File("tareas.csv");
+			FileReader fr = new FileReader(archivo);
+			br =  new BufferedReader(fr);
+			sprints.add(new SprintBacklog() );
+			String filaLeida;
+
+			String[] cadenaSeparada;
+			//new Tarea(new Requisito(), miembroElegido, titulo, descripcion, coste, beneficio));
+			while((filaLeida = br.readLine()) != null){
+				cadenaSeparada = filaLeida.split(separator);
+				String titulo = cadenaSeparada[0];
+				String descripcion = cadenaSeparada[1];
+				
+
+				int coste = (int) Float.parseFloat(cadenaSeparada[2]);
+				int beneficio = (int) Float.parseFloat(cadenaSeparada[3]);
+
+				String dniMiembro = cadenaSeparada[4];
+				String estado = cadenaSeparada[5];
+
+				MiembroDeEquipo miembro = null;
+				for (MiembroDeEquipo m: miembros){
+					if (m.getDni().equals(dniMiembro)){
+						miembro = m;
+					}
+				}
+				Tarea tarea = new Tarea(null, miembro, titulo, descripcion, coste, beneficio);
+				tarea.setEstado(Estado.valueOf(estado));
+				sprints.get(0).addTarea(tarea);
+				
+			}
+			br.close();
+			fr.close();
+			System.out.println("Tareas cargadas");
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.err.println(e.getMessage());
+			
+			System.err.println("Error en la carga de los datos");
+			
+		}
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

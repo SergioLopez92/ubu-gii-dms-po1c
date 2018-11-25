@@ -35,6 +35,7 @@ public class Tarea {
 		this.titulo = titulo;
 		this.coste = coste;
 		this.beneficio = beneficio;
+		this.estado = Estado.DOING;
 	}
 	
 	public void asignarMiembro (MiembroDeEquipo miem){
