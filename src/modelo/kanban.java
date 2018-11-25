@@ -45,6 +45,7 @@ public class kanban {
 
 			Scanner reader = new Scanner(System.in);
 			option = reader.nextInt();
+			
 
 			switch (option) {
 			case 0:
@@ -262,13 +263,14 @@ public class kanban {
 				for (SprintBacklog sp:sprints){
 					saveTareaReqToCSV(sp.getLista());
 				}
-
+				reader.close();
 
 				flag = false;
 				break;
 
 			case 8:
 				flag = false;
+				reader.close();
 				break;
 			}
 
@@ -460,16 +462,11 @@ public class kanban {
 					int id = Integer.parseInt(cadenaSeparada[0]);
 					String texto = cadenaSeparada[1];
 					requisitos.add(new Requisito(id,texto));
-					
-
-					
-
-
 										
 				}
 				br.close();
 				fr.close();
-				System.out.println("Requisitos cargadas");
+				System.out.println("Requisitos cargados");
 			}catch (Exception e) {
 				// TODO: handle exception
 				System.err.println(e.getMessage());
