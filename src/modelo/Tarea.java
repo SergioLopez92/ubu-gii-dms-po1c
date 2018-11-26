@@ -3,7 +3,6 @@
  */
 package modelo;
 
-import com.sun.org.apache.xpath.internal.axes.RTFIterator;
 
 /**
  * @author Sergio
@@ -93,6 +92,15 @@ public class Tarea {
 	public String toString(){
 		
 		return titulo;
+		
+	}
+	public String toStringCompleto(){
+		String str ="";
+		
+		str=titulo+": "+ descripcion+ ". Coste: "+ String.valueOf(coste)+" Beneficio: "+ String.valueOf(beneficio+" Asignado a: "+ asignadoA.getNombre()+". Estado: "+estado.toString());
+		
+		
+		return str;
 		
 	}
 }

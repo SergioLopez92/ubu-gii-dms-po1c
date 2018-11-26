@@ -40,8 +40,9 @@ public class kanban {
 			System.out.println("Opcion 4: Mover tarea del Product Backlog al Spring Backlog");
 			System.out.println("Opcion 5: Mover tarea entre las fases del ciclo de vida");
 			System.out.println("Opcion 6: Editar tarea");
-			System.out.println("Opcion 7: Salir de la aplicacion guardando los cambios");
-			System.out.println("Opcion 8: Salir de la aplicacion sin guardar");
+			System.out.println("Opcion 7: Mostrar los datos de las tareas");
+			System.out.println("Opcion 8: Salir de la aplicacion guardando los cambios");
+			System.out.println("Opcion 9: Salir de la aplicacion sin guardar");
 
 			Scanner reader = new Scanner(System.in);
 			option = reader.nextInt();
@@ -60,7 +61,8 @@ public class kanban {
 				break;
 			case 1:
 				System.out.println("Introduce el nombre del miembro a añadir");
-				String nombre = reader.next();
+				reader.nextLine();
+				String nombre = reader.nextLine();
 				System.out.println("Introduce la edad de " + nombre);
 				int edad = reader.nextInt();
 				System.out.println("Introduce el dni de " + nombre);
@@ -84,11 +86,10 @@ public class kanban {
 				break;
 			case 3:
 				System.out.println("Introduce el titulo de la tarea a añadir");
-				String titulo = reader.next();
+				reader.nextLine();
+				String titulo = reader.nextLine();
 				System.out.println("Introduce la descripcion de la tarea");
-				// PROBLEMA! Espacio en blanco lo casca, con nextLine saca lo
-				// siguiente sin esperar a recibir entrada
-				String descripcion = reader.next();
+				String descripcion = reader.nextLine();
 				System.out.println("Introduce el coste de la tarea");
 				float coste = reader.nextFloat();
 				System.out.println("Introduce el beneficio de la tarea");
@@ -141,11 +142,12 @@ public class kanban {
 				numSprint = reader.nextInt();
 				sprints.get(numSprint - 1).printear();
 
-				System.out.println("Elige el titulo de la tarea a mover");
+				System.out.println("Escribe el titulo de la tarea a mover");
 
 				
 				String tituloTarea = "";
-				tituloTarea = reader.next();
+				reader.nextLine();
+				tituloTarea = reader.nextLine();
 
 				System.out.println(
 						"Escribe el numero de la lista donde quieras mover la tarea(1-Todo, 2-Doing, 3-Test, 4-Finished)");
@@ -192,7 +194,8 @@ public class kanban {
 				}
 				
 				String tar;
-				tar = reader.next();
+				reader.nextLine();
+				tar = reader.nextLine();
 				 
 				 for (Tarea tarea : sprints.get(numSprint2).getLista()) {
 						if (tar.equals(tarea.getTitulo())) {
@@ -200,29 +203,13 @@ public class kanban {
 							break;
 						}
 					}
-				// Tarea tareaEditar = null;
-				//
-				// for (Tarea e : prBacklog.getToDo()) {
-				// if (e.getTitulo().equals(tar)) {
-				// tareaEditar = e;
-				// }
-				// }
-				// if (tareaEditar == null) {
-				// for (SprintBacklog spr : sprints) {
-				// for (int i = 0; i < spr.getListas().size(); i++) {
-				// for (Tarea tare : spr.getListas().get(i)) {
-				// if (tare.getTitulo().equals(tar)) {
-				// tareaEditar = tare;
-				// }
-				// }
-				// }
-				// }
-				// }
 
 				System.out.println("Introduce el nuevo titulo de la tarea");
-				String titulo2 = reader.next();
+				//reader.nextLine();
+				String titulo2 = reader.nextLine();
 				System.out.println("Introduce la descripcion de la tarea");
-				String descripcion2 = reader.next();
+				//reader.nextLine();
+				String descripcion2 = reader.nextLine();
 				System.out.println("Introduce el coste de la tarea");
 				float coste2 = reader.nextFloat();
 				System.out.println("Introduce el beneficio de la tarea");
@@ -257,7 +244,27 @@ public class kanban {
 					break;
 
 				}
+				
 			case 7:
+				System.out.println("Tareas en el ProductBacklog");
+
+				for (Tarea tarea:prBacklog.getToDo()){
+					System.out.println(tarea.toStringCompleto());
+				}
+				for(int i=0;i<sprints.size();i++){
+					System.out.println("Tareas del sprint: "+i);
+					System.out.println(sprints.get(i).getFechaInicio());
+
+					for (Tarea t2:sprints.get(i).getLista()){
+						System.out.println(t2.toStringCompleto());
+					}
+
+				}
+				
+
+				
+				break;
+			case 8:
 				saveMiembroToCSV(miembros);
 				// NECESARIO GUARDAR DONDE ESTABA CADA TAREA (SPRINT)
 				for (SprintBacklog sp:sprints){
@@ -268,7 +275,7 @@ public class kanban {
 				flag = false;
 				break;
 
-			case 8:
+			case 9:
 				flag = false;
 				reader.close();
 				break;

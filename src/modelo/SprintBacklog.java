@@ -1,12 +1,13 @@
 package modelo;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import modelo.Tarea.Estado;
 
 public class SprintBacklog extends Backlog{
 	
 	private ArrayList<Tarea> lista;
+	private LocalDateTime fechaInicio;
 
 //	private ArrayList<Tarea> toDo;
 //	private ArrayList<Tarea> doing;
@@ -21,6 +22,9 @@ public class SprintBacklog extends Backlog{
 //		finished = new ArrayList<Tarea>();
 //		
 		lista = new ArrayList<Tarea>();
+		fechaInicio = LocalDateTime.now();
+				
+				
 //		listas.add(toDo);
 //		listas.add(doing);
 //		listas.add(test);
@@ -36,7 +40,12 @@ public class SprintBacklog extends Backlog{
 		lista.add(tarea);
 	}
 
-//	//getter y setter toDo
+	
+public LocalDateTime getFechaInicio() {
+		return fechaInicio;
+	}
+
+	//	//getter y setter toDo
 //	public void addTareaToDo(Tarea tarea){
 //		tarea.setEstado(Estado.TODO);
 //		toDo.add(tarea);
