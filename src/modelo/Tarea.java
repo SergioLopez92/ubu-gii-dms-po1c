@@ -13,7 +13,7 @@ public class Tarea {
 	private float coste, beneficio;
 	private Requisito requisito;
 	private MiembroDeEquipo asignadoA;
-	enum Estado{
+	public enum Estado{
 		TODO, DOING, FINISHED, TESTING;
 	}
 	
