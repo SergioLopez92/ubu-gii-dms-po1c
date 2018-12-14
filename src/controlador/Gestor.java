@@ -19,6 +19,7 @@ public class Gestor {
 	
 		ArrayList<MiembroDeEquipo> miembros = new ArrayList<MiembroDeEquipo>();
 		ArrayList<SprintBacklog> sprints = new ArrayList<SprintBacklog>();
+		ArrayList<Requisito> requisitos = new ArrayList<Requisito>();
 		ProductBacklog prBacklog = new ProductBacklog();
 	
 	
@@ -43,7 +44,7 @@ public class Gestor {
 					System.out.println(count0 + ":" + miembro.getNombre());
 	
 				}
-				CargadorDeDatos.loadSprints(prBacklog, sprints, miembros);
+				CargadorDeDatos.loadSprints(prBacklog, sprints, miembros, requisitos);
 				break;
 			case 1:
 				System.out.println("Introduce el nombre del miembro a añadir");
@@ -89,16 +90,33 @@ public class Gestor {
 				}
 				int choice = reader.nextInt();
 				MiembroDeEquipo miembroElegido = miembros.get(choice - 1);
-	
+				Requisito newReq = null;
+				if (requisitos.size() > 0){
+					System.out.println("Elige el requisito de la tarea ('0' crear nuevo requisito)");
+					count = 0;
+					for(Requisito req : requisitos){
+						count++;
+						System.out.println(count + ": ID " + req.getID() + " "+req.getTexto() );
+					}
+					int choiceReq = reader.nextInt();
+					
+					if(choiceReq > 0){
+							newReq = requisitos.get(choiceReq-1);
+					}
+				}
+				
 				System.out.println("Se va a añadir la tarea con los siguientes datos:" + "Titulo: " + titulo
 						+ "Asignada a: " + miembroElegido.getNombre());
 				System.out.println("¿Es correcto? s/n");
 				String valid2 = reader.next();
 				if (valid2.equals("s")) {
-	
+					if(newReq == null){
+						newReq = new Requisito();
+					}
 					prBacklog.setTareaToDo(
-							new Tarea(new Requisito(), miembroElegido, titulo, descripcion, coste, beneficio));
+							new Tarea(newReq, miembroElegido, titulo, descripcion, coste, beneficio));
 				}
+				requisitos.add(newReq);
 				break;
 	
 			case 4:

@@ -48,7 +48,7 @@ public class CargadorDeDatos {
 	}
 	}
 
-	public static void loadSprints(ProductBacklog prBacklog, ArrayList<SprintBacklog> sprints, ArrayList<MiembroDeEquipo> miembros ){
+	public static void loadSprints(ProductBacklog prBacklog, ArrayList<SprintBacklog> sprints, ArrayList<MiembroDeEquipo> miembros, ArrayList<Requisito> requisitos  ){
 		
 		BufferedReader br = null;
 		try{
@@ -61,7 +61,7 @@ public class CargadorDeDatos {
 	
 			String[] cadenaSeparada;
 			
-			ArrayList<Requisito> requisitos = new ArrayList<Requisito>();
+			//ArrayList<Requisito> requisitos = new ArrayList<Requisito>();
 			CargadorDeDatos.loadRequisitos(requisitos);
 			
 			
