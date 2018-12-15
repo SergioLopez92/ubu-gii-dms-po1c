@@ -22,7 +22,17 @@ public class Gestor {
 		ArrayList<Requisito> requisitos = new ArrayList<Requisito>();
 		ProductBacklog prBacklog = new ProductBacklog();
 	
-	
+		CargadorDeDatos.loadMiembros(miembros);
+		int count0 = 0;
+		for (MiembroDeEquipo miembro : miembros) {
+			count0++;
+			System.out.println(count0 + ":" + miembro.getNombre());
+
+		}
+		CargadorDeDatos.loadSprints(prBacklog, sprints, miembros, requisitos, "tareas.csv");
+		CargadorDeDatos.loadSprints(prBacklog, sprints, miembros, requisitos, "productBack.csv");
+
+		
 		// bucle para ejecucion principal
 	
 		boolean flag = true;
@@ -38,13 +48,14 @@ public class Gestor {
 			switch (option) {
 			case 0:
 				CargadorDeDatos.loadMiembros(miembros);
-				int count0 = 0;
+				count0 = 0;
 				for (MiembroDeEquipo miembro : miembros) {
 					count0++;
 					System.out.println(count0 + ":" + miembro.getNombre());
 	
 				}
-				CargadorDeDatos.loadSprints(prBacklog, sprints, miembros, requisitos);
+				CargadorDeDatos.loadSprints(prBacklog, sprints, miembros, requisitos, "tareas.csv");
+				CargadorDeDatos.loadSprints(prBacklog, sprints, miembros, requisitos, "productBack.csv");
 				break;
 			case 1:
 				System.out.println("Introduce el nombre del miembro a añadir");
@@ -115,8 +126,9 @@ public class Gestor {
 					}
 					prBacklog.setTareaToDo(
 							new Tarea(newReq, miembroElegido, titulo, descripcion, coste, beneficio));
+					requisitos.add(newReq);
 				}
-				requisitos.add(newReq);
+				
 				break;
 	
 			case 4:
@@ -270,13 +282,13 @@ public class Gestor {
 				break;
 			case 8:
 				Guardado guardarDatos = new Guardado(1);
-				guardarDatos.saveToCSV(miembros);
+				guardarDatos.saveToCSV(miembros, prBacklog);
 				
 				guardarDatos.changeEstrategia(2);
 				//MiembroCSV.saveToCSV(miembros);
 				// NECESARIO GUARDAR DONDE ESTABA CADA TAREA (SPRINT)
 				for (SprintBacklog sp:sprints){
-					guardarDatos.saveToCSV(sp.getLista());
+					guardarDatos.saveToCSV(sp.getLista(), prBacklog);
 					//TareaReqCSV.saveToCSV(sp.getLista());
 				}
 				reader.close();
@@ -288,6 +300,13 @@ public class Gestor {
 				flag = false;
 				reader.close();
 				break;
+			case 10:
+				miembros = new ArrayList<MiembroDeEquipo>();
+				sprints = new ArrayList<SprintBacklog>();
+				requisitos = new ArrayList<Requisito>();
+				prBacklog = new ProductBacklog();
+				
+				System.out.println("Datos borrados.");
 			}
 	
 		}

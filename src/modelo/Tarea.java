@@ -99,7 +99,6 @@ public class Tarea {
 		
 		str=titulo+": "+ descripcion+ ". Coste: "+ String.valueOf(coste)+" Beneficio: "+ String.valueOf(beneficio+" Asignado a: "+ asignadoA.getNombre()+". Estado: "+estado.toString());
 		
-		
 		return str;
 		
 	}

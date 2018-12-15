@@ -7,7 +7,7 @@ public class Vista {
 		System.out.println(
 				"Seleccione la opción que desee realizar del siguiente menu escribiendo el numero correspondiente");
 		System.out.println("--------------------------");
-		System.out.println("Opcion 0: Cargar datos");
+		System.out.println("Opcion 0: Volver a cargar datos");
 		System.out.println("Opcion 1: Añadir miebros");
 		System.out.println("Opcion 2: Añadir Sprint Backlog");
 		System.out.println("Opcion 3: Añadir tarea al Product Backlog");
@@ -17,6 +17,7 @@ public class Vista {
 		System.out.println("Opcion 7: Mostrar los datos de las tareas");
 		System.out.println("Opcion 8: Salir de la aplicacion guardando los cambios");
 		System.out.println("Opcion 9: Salir de la aplicacion sin guardar");
+		System.out.println("Opcion 10: Borrar datos de sesión actual");
 	}
 
 }

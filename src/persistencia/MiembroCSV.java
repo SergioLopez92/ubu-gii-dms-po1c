@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import modelo.MiembroDeEquipo;
+import modelo.ProductBacklog;
 
 public class MiembroCSV extends TipoDatoGuardado {
 	
@@ -36,6 +37,11 @@ public class MiembroCSV extends TipoDatoGuardado {
 		} catch (IOException e) {
 		}
 	
+	}
+
+	@Override
+	public <E> void saveToCSV(ArrayList<E> dato, ProductBacklog prdBack) {
+		this.saveToCSV(dato);
 	}
 
 }

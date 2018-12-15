@@ -2,6 +2,8 @@ package persistencia;
 
 import java.util.ArrayList;
 
+import modelo.ProductBacklog;
+
 public class Guardado {
 	private TipoDatoGuardado dato;
 	private int estrategia;
@@ -27,8 +29,8 @@ public class Guardado {
 		 }
 	}
 	
-	public <E> void saveToCSV(ArrayList<E> miem_tar){
-		dato.saveToCSV(miem_tar);
+	public <E> void saveToCSV(ArrayList<E> miem_tar, ProductBacklog prdBack){
+		dato.saveToCSV(miem_tar, prdBack);
 	}
 
 }

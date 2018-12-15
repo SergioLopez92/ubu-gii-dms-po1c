@@ -48,12 +48,12 @@ public class CargadorDeDatos {
 	}
 	}
 
-	public static void loadSprints(ProductBacklog prBacklog, ArrayList<SprintBacklog> sprints, ArrayList<MiembroDeEquipo> miembros, ArrayList<Requisito> requisitos  ){
+	public static void loadSprints(ProductBacklog prBacklog, ArrayList<SprintBacklog> sprints, ArrayList<MiembroDeEquipo> miembros, ArrayList<Requisito> requisitos, String nombreArchivo ){
 		
 		BufferedReader br = null;
 		try{
 	
-			File archivo = new File("tareas.csv");
+			File archivo = new File(nombreArchivo);
 			FileReader fr = new FileReader(archivo);
 			br =  new BufferedReader(fr);
 			sprints.add(new SprintBacklog() );
@@ -63,6 +63,7 @@ public class CargadorDeDatos {
 			
 			//ArrayList<Requisito> requisitos = new ArrayList<Requisito>();
 			CargadorDeDatos.loadRequisitos(requisitos);
+			
 			
 			
 			
@@ -96,8 +97,12 @@ public class CargadorDeDatos {
 				}
 				Tarea tarea = new Tarea(new Requisito(id, texto), miembro, titulo, descripcion, coste, beneficio);
 				tarea.setEstado(Estado.valueOf(estado));
-				sprints.get(0).addTarea(tarea);
-				
+				if (nombreArchivo.equals("tareas.csv")){
+					sprints.get(0).addTarea(tarea);
+				}else if (nombreArchivo.equals("productBack.csv")){
+					prBacklog.setTareaToDo(tarea);
+
+				}
 			}
 			br.close();
 			fr.close();
@@ -139,10 +144,10 @@ public class CargadorDeDatos {
 				System.err.println("Error en la carga de los datos[Requisitos]");
 				
 			}
-			
-		
-		
-		
 	}
+	
+	
+	
+	
 
 }
