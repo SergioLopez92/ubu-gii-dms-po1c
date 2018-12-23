@@ -7,6 +7,5 @@ public class Gestor {
 		Choice choice = new Choice();
 		choice.cargarDatos();
 		choice.empezar();
-
 	}
 }
