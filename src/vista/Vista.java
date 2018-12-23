@@ -15,9 +15,10 @@ public class Vista {
 		System.out.println("Opcion 5: Mover tarea entre las fases del ciclo de vida");
 		System.out.println("Opcion 6: Editar tarea");
 		System.out.println("Opcion 7: Mostrar los datos de las tareas");
-		System.out.println("Opcion 8: Salir de la aplicacion guardando los cambios");
-		System.out.println("Opcion 9: Salir de la aplicacion sin guardar");
-		System.out.println("Opcion 10: Borrar datos de sesión actual");
+		System.out.println("Opcion 8: Editar requisito");
+		System.out.println("Opcion 9: Salir de la aplicacion guardando los cambios");
+		System.out.println("Opcion 10: Salir de la aplicacion sin guardar");
+		System.out.println("Opcion 11: Borrar datos de sesión actual");
 	}
 
 }
